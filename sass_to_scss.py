@@ -7,25 +7,25 @@ def count_leading_spaces(line):
     return len(line) - len(line.lstrip(' '))
 
 
-def to_blocks(lines):
+def sass_to_scss(sass_lines):
     outlines = []
     cleaned = []
 
     css_rule = re.compile(r'\s+\w+:')
 
-    for line in lines:
+    for line in sass_lines:
         if line.isspace():
             continue
         cleaned.append(line.replace('\n', ''))
 
     for i, line in enumerate(cleaned):
-        indent = count_leading_spaces(lines[i])
+        indent = count_leading_spaces(sass_lines[i])
         try:
-            next_indent = count_leading_spaces(lines[i + 1])
+            next_indent = count_leading_spaces(sass_lines[i + 1])
         except IndexError:
-            continue
+            next_indent = 0
         try:
-            prev_indent = count_leading_spaces(lines[i - 1])
+            prev_indent = count_leading_spaces(sass_lines[i - 1])
         except IndexError:
             prev_indent = 0
 
@@ -48,18 +48,3 @@ def to_blocks(lines):
             outlines.append(line)
 
     return '\n'.join(outlines)
-
-
-def main(args):
-    lines = args.file.readlines()
-    blocks = to_blocks(lines)
-    for block in blocks:
-        pprint(block)
-
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Convert a SASS file to SCSS.')
-    parser.add_argument('file', type=argparse.FileType('r'))
-    parser.add_argument('--spaces', help="number of spaces for indentation", default=4)
-    args = parser.parse_args()
-    main(args)
