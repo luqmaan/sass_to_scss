@@ -12,6 +12,21 @@ class TestSassToSCSS(TestCase):
         sass = """
 @import bourbon/bourbon
 
+=red-text
+    color: red
+
+=rounded($amount, $background_color)
+    -moz-border-radius: $amount
+    -webkit-border-radius: $amount
+    border-radius: $amount
+    background-color: saturate(lighten($background_color, 30%), 100%)
+
+.error
+    +red-text
+    .details
+        border: 3px solid #777
+        +rounded(0.5em, desaturate(#5336a2, 10%))
+
 .container
     position: absolute
     top: 0
@@ -30,6 +45,25 @@ class TestSassToSCSS(TestCase):
 
         scss = """
 @import "bourbon/bourbon";
+
+@mixin red-text {
+    color: red;
+}
+
+@mixin rounded($amount, $background_color) {
+    -moz-border-radius: $amount;
+    -webkit-border-radius: $amount;
+    border-radius: $amount;
+    background-color: saturate(lighten($background_color, 30%), 100%);
+}
+
+.error {
+    @include red-text;
+    .details {
+        border: 3px solid #777;
+        @include rounded(0.5em, desaturate(#5336a2, 10%));
+    }
+}
 
 .container {
     position: absolute;

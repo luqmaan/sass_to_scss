@@ -7,52 +7,67 @@ def count_leading_spaces(line):
     return len(line) - len(line.lstrip(' '))
 
 
-def sass_to_scss(sass_lines):
+def sass_to_scss(sass_lines, spaces=4):
     outlines = []
     cleaned = []
 
-    css_rule = re.compile(r'\s+\w+:')
-    css_import = re.compile(r'@import')
+    re_css_rule = re.compile(r'[\w\-\d]+:')
+    re_import = re.compile(r'@import')
+    re_sass_mixin = re.compile(r'\=\w+')
+    re_sass_include = re.compile(r'\+\w+')
 
     for line in sass_lines:
-        if line.isspace():
-            continue
-
         line = line.replace('\n', '')
 
-        if css_import.match(line):
+        if re_import.match(line):
             line = line.replace('@import ', '@import "')
             line += '";'
 
-        if css_rule.match(line) is not None:
+        if re_sass_mixin.search(line):
+            line = line.replace('=', '@mixin ')
+
+        if re_sass_include.search(line):
+            line = line.replace('+', '@include ')
+            line += ';'
+
+        if re_css_rule.search(line):
             line += ';'
 
         cleaned.append(line)
 
+    # add an extra element in case we get to the end and
+    # we need one more iteration to figure out the }
+    # because we need to get next_indent
+    cleaned.append('')
+
     for i, line in enumerate(cleaned):
-        indent = count_leading_spaces(sass_lines[i])
+        indent = count_leading_spaces(cleaned[i])
         try:
-            next_indent = count_leading_spaces(sass_lines[i + 1])
+            next_indent = count_leading_spaces(cleaned[i + 1])
         except IndexError:
             next_indent = 0
         try:
-            prev_indent = count_leading_spaces(sass_lines[i - 1])
+            prev_indent = count_leading_spaces(cleaned[i - 1])
         except IndexError:
             prev_indent = 0
 
-        if indent < next_indent:
-            outlines.append(line + ' ' + '{')
+        print i, "next_indent", next_indent, "indent", indent, "prev_indent", prev_indent, line
 
-        elif indent > prev_indent and indent != next_indent:
-            outlines.append(line)
-            closed_indent = indent
-            spaces = indent - prev_indent
-            while closed_indent != next_indent:
+        if indent < next_indent:
+            line = line + ' ' + '{'
+            print '{'
+
+        if indent < prev_indent:
+            print i
+            closed_indent = prev_indent
+            while closed_indent >= next_indent and closed_indent != 0:
+                print '} : ', closed_indent, '- ', next_indent, '=', closed_indent - next_indent
                 insert = ' ' * (closed_indent - spaces) + '}'
                 outlines.append(insert)
                 closed_indent -= spaces
 
-        else:
-            outlines.append(line)
+        outlines.append(line)
 
+    # remove that extra line we added
+    outlines.pop()
     return '\n'.join(outlines)
