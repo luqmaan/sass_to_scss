@@ -10,6 +10,8 @@ class TestSassToSCSS(TestCase):
 
     def test_triple_nested_class(self):
         sass = """
+@import bourbon/bourbon
+
 .container
     position: absolute
     top: 0
@@ -27,6 +29,8 @@ class TestSassToSCSS(TestCase):
         """
 
         scss = """
+@import "bourbon/bourbon";
+
 .container {
     position: absolute;
     top: 0;

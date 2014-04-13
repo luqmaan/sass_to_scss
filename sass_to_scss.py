@@ -12,11 +12,22 @@ def sass_to_scss(sass_lines):
     cleaned = []
 
     css_rule = re.compile(r'\s+\w+:')
+    css_import = re.compile(r'@import')
 
     for line in sass_lines:
         if line.isspace():
             continue
-        cleaned.append(line.replace('\n', ''))
+
+        line = line.replace('\n', '')
+
+        if css_import.match(line):
+            line = line.replace('@import ', '@import "')
+            line += '";'
+
+        if css_rule.match(line) is not None:
+            line += ';'
+
+        cleaned.append(line)
 
     for i, line in enumerate(cleaned):
         indent = count_leading_spaces(sass_lines[i])
@@ -28,9 +39,6 @@ def sass_to_scss(sass_lines):
             prev_indent = count_leading_spaces(sass_lines[i - 1])
         except IndexError:
             prev_indent = 0
-
-        if css_rule.match(line) is not None:
-            line += ';'
 
         if indent < next_indent:
             outlines.append(line + ' ' + '{')
