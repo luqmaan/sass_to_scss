@@ -95,8 +95,8 @@ class SassToSCSS(object):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Convert a Sass file to SCSS.')
     parser.add_argument('file', type=argparse.FileType('r'))
-    parser.add_argument('--spaces', help="Number of spaces used for indentation", default=DEFAULT_INDENTATION)
-    parser.add_argument('--debug', help="Output debug information", dest='debug', action='store_true')
+    parser.add_argument('--spaces', help="number of spaces used for indentation", default=DEFAULT_INDENTATION)
+    parser.add_argument('--debug', help="output debug information", dest='debug', action='store_true')
     args = parser.parse_args()
 
     sassy = SassToSCSS(loglevel=args.debug or logging.INFO, spaces=args.spaces)

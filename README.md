@@ -1,19 +1,40 @@
-Convert Sass to SCSS
+Convert Sass to SCSS [![Build Status](https://travis-ci.org/luqmaan/sass_to_scss.svg?branch=1.2)](https://travis-ci.org/luqmaan/sass_to_scss)
 ==
 
 libsass/sassc require SCSS. This is an experiment at writing a really barebones Sass to SCSS converter. Hopefully if this experiment works out, I can rewrite it in C and use it in a patch to libsass.
 
 Supports
--
+--
 
-- automatic semicolon (;) insertion
-- automatic opening and closing curly brance ({}) insertion
-- @import bourbon/bourbon > @import "bourbon/bourbon"
-- = > mixin
-- + > include
+- automatic semicolon `;` insertion
+- automatic opening and closing curly brace `{}` insertion
+- `@import bourbon/bourbon` => `@import "bourbon/bourbon"`
+- `=` => `mixin`
+- `+` => `include`
+
+Usage
+--
+
+Convert asdf.sass to asdf.scss: `python sass_to_scss.py asdf.sass`
+
+Options:
+
+```
+usage: sass_to_scss.py [-h] [--spaces SPACES] 9[--debug] file
+
+Convert a Sass file to SCSS.
+
+positional arguments:
+  file
+
+optional arguments:
+  -h, --help       show this help message and exit
+  --spaces SPACES  number of spaces used for indentation
+  --debug          output debug information
+```
 
 
-Demo
+Example
 --
 
 Turn this beautiful Sass:
