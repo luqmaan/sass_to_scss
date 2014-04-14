@@ -41,9 +41,14 @@ Turn this beautiful Sass:
 
 ```sass
 @import bourbon/bourbon
+@import "http://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic|Oswald:400,300,700|Droid+Sans:400,700"
+
+$teal: #00917d
+$serif: 'PT Serif', serif
 
 =red-text
     color: red
+    background-color: $teal
 
 =rounded($amount, $background_color)
     -moz-border-radius: $amount
@@ -62,7 +67,8 @@ Turn this beautiful Sass:
     top: 0
     color: green
     bottom: 0
-    .right
+
+    .right, .row:hover, &.touch .row
         right: 0
         border: 1px solid #fff
         h1
@@ -77,18 +83,19 @@ into this less beautiful SCSS:
 
 ```scss
 @import "bourbon/bourbon";
-
+@import "http://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic|Oswald:400,300,700|Droid+Sans:400,700";
+$teal: #00917d;
+$serif: 'PT Serif', serif;
 @mixin red-text {
     color: red;
+    background-color: $teal;
 }
-
 @mixin rounded($amount, $background_color) {
     -moz-border-radius: $amount;
     -webkit-border-radius: $amount;
     border-radius: $amount;
     background-color: saturate(lighten($background_color, 30%), 100%);
 }
-
 .error {
     @include red-text;
     .details {
@@ -96,13 +103,12 @@ into this less beautiful SCSS:
         @include rounded(0.5em, desaturate(#5336a2, 10%));
     }
 }
-
 .container {
     position: absolute;
     top: 0;
     color: green;
     bottom: 0;
-    .right {
+    .right, .row:hover, &.touch .row {
         right: 0;
         border: 1px solid #fff;
         h1 {

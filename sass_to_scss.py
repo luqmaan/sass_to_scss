@@ -1,6 +1,6 @@
 import argparse
-import re
 import logging
+import re
 
 DEFAULT_INDENTATION = 4
 
@@ -97,9 +97,15 @@ if __name__ == '__main__':
     parser.add_argument('file', type=argparse.FileType('r'))
     parser.add_argument('--spaces', help="number of spaces used for indentation", default=DEFAULT_INDENTATION)
     parser.add_argument('--debug', help="output debug information", dest='debug', action='store_true')
+    parser.add_argument('--outfile', help="file to output, defaults to INFILE.scss")
     args = parser.parse_args()
 
     sassy = SassToSCSS(loglevel=args.debug or logging.INFO, spaces=args.spaces)
 
-    lines = args.file.readlines()
-    print sassy.convert(lines)
+    outfile = args.outfile or args.file.name.replace('.sass', '.scss')
+
+    result = sassy.convert(args.file.readlines())
+
+    print('Writing result to {}'.format(outfile))
+    with open(outfile, 'w+') as f:
+        f.write(result)
