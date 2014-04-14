@@ -1,4 +1,4 @@
-Convert Sass to SCSS [![Build Status](https://travis-ci.org/luqmaan/sass_to_scss.svg?branch=1.2)](https://travis-ci.org/luqmaan/sass_to_scss)
+Convert Sass to SCSS [![Build Status](https://travis-ci.org/luqmaan/sass_to_scss.svg?branch=master)](https://travis-ci.org/luqmaan/sass_to_scss)
 ==
 
 libsass/sassc require SCSS. This is an experiment at writing a really barebones Sass to SCSS converter. Hopefully if this experiment works out, I can rewrite it in C and use it in a patch to libsass.
